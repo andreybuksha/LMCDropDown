@@ -44,6 +44,11 @@ public class ListDropDownView: UIView {
         setup()
     }
     
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        invalidateIntrinsicContentSize()
+    }
+    
     private func setup() {
         createSubviews()
         setupConstraints()
@@ -52,7 +57,7 @@ public class ListDropDownView: UIView {
     private func createSubviews() {
         tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.estimatedRowHeight = 50
+        tableView.estimatedRowHeight = 40
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = rowSeparatorStyle
         addSubview(tableView)
