@@ -13,6 +13,12 @@ protocol ListDropDownViewDelegate: AnyObject {
 
 public class ListDropDownView: UIView {
     
+    @objc public dynamic var listBackgroundColor = ListDropDownDefaultAppearance.backgroundColor {
+        didSet {
+            tableView.backgroundColor = listBackgroundColor
+        }
+    }
+    
     private var tableView: UITableView!
     var dropDownRows: [ListDropDownCellPresenting]? {
         didSet {

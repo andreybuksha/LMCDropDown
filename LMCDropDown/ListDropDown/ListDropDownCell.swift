@@ -102,6 +102,7 @@ public class ListDropDownCell: UITableViewCell {
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.font = titleLabelFont
+        titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .vertical)
         stackView.addArrangedSubview(titleLabel)
         
         subtitleLabel = UILabel()

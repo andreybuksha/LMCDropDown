@@ -38,10 +38,10 @@ public class DropDownContentViewController<T: UIView>: UIViewController {
             
             let bottomConstraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: self.view.bottomAnchor,
                                                                 constant: 20)
-            bottomConstraint.priority = .required
+            bottomConstraint.priority = .defaultHigh
             
             let topRelativeConstraint = self.view.topAnchor.constraint(equalTo: anchorView.topAnchor)
-            topRelativeConstraint.priority = .defaultHigh
+            topRelativeConstraint.priority = .defaultLow
             
             NSLayoutConstraint.activate([
                 bottomConstraint,

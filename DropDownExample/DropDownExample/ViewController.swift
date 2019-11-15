@@ -29,7 +29,10 @@ class ViewController: UIViewController {
         let dropDownVC = ListDropDownController(with: self, anchorView: button)
         
         dropDownVC.dropDownRows = data
-        dropDownVC.show(animated: true)
+        
+        ListDropDownView.appearance().listBackgroundColor = .red
+        
+        dropDownVC.show(on: view, animated: true)
     }
     
 }
