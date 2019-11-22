@@ -21,17 +21,18 @@ class ViewController: UIViewController {
     @IBAction func onButtonTapped(_ sender: UIButton) {
         let first = ListData(title: "John Doe", subtitle: "Accountant")
         let forth = ListData(title: "Hideo Kodjima", subtitle: "Genius")
-        
+
         let data = [
             first,
             forth
         ]
         let dropDownVC = ListDropDownController(with: self, anchorView: button)
-        
+        dropDownVC.presentMode = .init(verticalPosition: .top, widthMode: .equalToAnchor)
+
         dropDownVC.dropDownRows = data
-        
+
         ListDropDownView.appearance().listBackgroundColor = .red
-        
+
         dropDownVC.show(on: view, animated: true)
     }
     

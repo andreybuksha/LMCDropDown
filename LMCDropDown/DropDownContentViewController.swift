@@ -11,6 +11,7 @@ import UIKit
 public class DropDownContentViewController<T: UIView>: UIViewController {
     
     public var contentView: T
+    public var presentMode: DropDownPresentMode = .init(verticalPosition: .bottomOverlapped, widthMode: .equalToAnchor)
     private var anchorView: UIView
     
     public init(with parentController: UIViewController, contentView: T, anchorView: UIView) {
@@ -33,29 +34,11 @@ public class DropDownContentViewController<T: UIView>: UIViewController {
     }
     
     public func show(on view: UIView? = nil, animated: Bool) {
-        if let view = view {
-            view.addSubview(self.view)
-            
-            let bottomConstraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: self.view.bottomAnchor,
-                                                                constant: 20)
-            bottomConstraint.priority = .defaultHigh
-            
-            let topRelativeConstraint = self.view.topAnchor.constraint(equalTo: anchorView.topAnchor)
-            topRelativeConstraint.priority = .defaultLow
-            
-            NSLayoutConstraint.activate([
-                bottomConstraint,
-                topRelativeConstraint,
-                self.view.leadingAnchor.constraint(equalTo: anchorView.leadingAnchor),
-                anchorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-            ])
-        } else if let view = anchorView.superview {
-            view.addSubview(self.view)
-            NSLayoutConstraint.activate([
-                self.view.topAnchor.constraint(equalTo: anchorView.topAnchor),
-                self.view.leadingAnchor.constraint(equalTo: anchorView.leadingAnchor),
-                anchorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-            ])
+        if let containerView = view ?? anchorView.superview {
+            containerView.addSubview(self.view)
+            let verticalConstraints = getVerticalConstraints(containerView: containerView)
+            let horizontalConstraint = getHorizontalConstraints(containerView: containerView)
+            NSLayoutConstraint.activate(verticalConstraints + horizontalConstraint)
         }
         if animated {
             self.view.alpha = 0
@@ -109,6 +92,75 @@ public class DropDownContentViewController<T: UIView>: UIViewController {
             self.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             self.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
+    }
+    
+    private func getVerticalConstraints(containerView: UIView) -> [NSLayoutConstraint] {
+        switch presentMode.verticalPosition {
+        case .top, .topOverlapped:
+            let topConstraint = view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
+                                                          constant: 20)
+            topConstraint.priority = .defaultHigh
+            
+            let bottomAnchor = presentMode.verticalPosition == .top ?
+                anchorView.topAnchor :
+                anchorView.bottomAnchor
+            let bottomConstraint = bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                                           constant: presentMode.verticalSpacing)
+            bottomConstraint.priority = .defaultLow
+            
+            return [
+                topConstraint,
+                bottomConstraint
+            ]
+        case .bottom, .bottomOverlapped:
+            let topAnchor = presentMode.verticalPosition == .bottom ?
+                anchorView.bottomAnchor :
+                anchorView.topAnchor
+            let topConstraint = view.topAnchor.constraint(equalTo: topAnchor, constant: presentMode.verticalSpacing)
+            topConstraint.priority = .defaultLow
+            
+            let bottomConstraint = containerView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor,
+                                                                         constant: 20)
+            bottomConstraint.priority = .defaultHigh
+            
+            return [
+                topConstraint,
+                bottomConstraint
+            ]
+        }
+    }
+    
+    private func getHorizontalConstraints(containerView: UIView) -> [NSLayoutConstraint] {
+        switch presentMode.widthMode {
+        case .equalToAnchor:
+            return [
+                view.leadingAnchor.constraint(equalTo: anchorView.leadingAnchor),
+                anchorView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ]
+        default:
+            let centerXConstraint = view.centerXAnchor.constraint(equalTo: anchorView.centerXAnchor)
+            centerXConstraint.priority = .defaultLow
+            
+            let leadingConstraint = view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor,
+                                                                  constant: 20)
+            leadingConstraint.priority = .defaultHigh
+            
+            let trailingConstraint = view.trailingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor,
+                                                                    constant: 20)
+            trailingConstraint.priority = .defaultHigh
+            
+            var constraints = [
+                leadingConstraint,
+                centerXConstraint,
+                trailingConstraint
+            ]
+            
+            if case .exact(let value) = presentMode.widthMode {
+                constraints.append(view.widthAnchor.constraint(equalToConstant: value))
+            }
+            
+            return constraints
+        }
     }
 
 }
