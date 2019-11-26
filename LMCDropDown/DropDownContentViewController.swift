@@ -10,7 +10,7 @@ import UIKit
 
 public class DropDownContentViewController: UIViewController {
     
-    public weak var contentView: UIView?
+    public var contentView: UIView?
     public var presentMode: DropDownPresentMode = .init(verticalPosition: .bottomOverlapped, widthMode: .equalToAnchor)
     private var anchorView: UIView
     
