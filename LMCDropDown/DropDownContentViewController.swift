@@ -8,13 +8,13 @@
 
 import UIKit
 
-public class DropDownContentViewController<T: UIView>: UIViewController {
+public class DropDownContentViewController: UIViewController {
     
-    public var contentView: T
+    public weak var contentView: UIView?
     public var presentMode: DropDownPresentMode = .init(verticalPosition: .bottomOverlapped, widthMode: .equalToAnchor)
     private var anchorView: UIView
     
-    public init(with parentController: UIViewController, contentView: T, anchorView: UIView) {
+    public init(with parentController: UIViewController, contentView: UIView, anchorView: UIView) {
         self.contentView = contentView
         self.anchorView = anchorView
         super.init(nibName: nil, bundle: nil)
@@ -78,11 +78,12 @@ public class DropDownContentViewController<T: UIView>: UIViewController {
     }
     
     private func setupContentView() {
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 4
+        contentView?.clipsToBounds = true
+        contentView?.layer.cornerRadius = 4
     }
     
     private func addContentView() {
+        guard let contentView = contentView else { return }
         setupContentView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentView)

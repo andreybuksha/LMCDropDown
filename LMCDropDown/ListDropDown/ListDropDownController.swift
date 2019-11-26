@@ -11,11 +11,11 @@ public protocol ListDropDownControllerDelegate: AnyObject {
     func didSelect(item: ListDropDownCellPresenting, at index: Int)
 }
 
-public class ListDropDownController: DropDownContentViewController<ListDropDownView> {
+public class ListDropDownController: DropDownContentViewController {
     
     public var dropDownRows: [ListDropDownCellPresenting]? {
         didSet {
-            contentView.dropDownRows = dropDownRows
+            (contentView as? ListDropDownView)?.dropDownRows = dropDownRows
         }
     }
     public weak var delegate: ListDropDownControllerDelegate?
