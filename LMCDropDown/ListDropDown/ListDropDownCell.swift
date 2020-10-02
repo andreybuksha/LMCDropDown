@@ -114,6 +114,7 @@ public class ListDropDownCell: UITableViewCell {
         stackView.addArrangedSubview(subtitleLabel)
         
         addSubview(stackView)
+        sendSubviewToBack(contentView)
     }
     
     private func setupConstraints() {
